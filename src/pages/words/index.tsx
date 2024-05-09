@@ -1,42 +1,55 @@
+import { SquarePlus } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
+import { AlternatingItem } from "~/components/alternatingItem";
 import { WordItem } from "~/components/wordItem";
+import { Layout } from "~/features/layout";
 import { Word } from "~/types/word";
 import { api } from "~/utils/api";
 
 export default function WordsP() {
-  const engWords = api.word.search.useQuery({ language: "eng" }).data;
-  const rusWords = api.word.search.useQuery({ language: "rus" }).data;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const engWords: Word[] = api.word.search.useQuery({ language: "eng" }).data;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const rusWords: Word[] = api.word.search.useQuery({ language: "rus" }).data;
   return (
-    <div>
-      
-      <div className="flex gap-4">
-        words
-        <Link className="border-[1px] text-center w-[20px]" href={'/create'}> 
-        +
-        </Link>
-      </div>
-      <div className="flex gap-6">
-        <div className="w-[50%]">
-          rus
-          <WordList words={rusWords ?? []} />
+    <Layout page="Words">
+      <div>
+        <div className="flex items-center gap-2 text-primary-1">
+          <div className="text-3xl">
+             words
+          </div>
+         
+          <Link className="" href={"/create"}>
+            <SquarePlus />
+          </Link>
         </div>
-        <div className="w-[50%]">
-          eng
-          <WordList words={engWords ?? []} />
+        <div className="flex gap-6">
+          <div className="w-[50%]">
+            <div className="text-center text-primary-3">russian</div>
+
+            <WordList words={rusWords ?? []} />
+          </div>
+          <div className="w-[50%]">
+            <div className="text-center text-primary-3">english</div>
+
+            <WordList words={engWords ?? []} />
+          </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
 const WordList: FC<{ words: Word[] }> = ({ words }) => {
   return (
-    <div className="flex h-[600px] w-full flex-col gap-2 overflow-auto bg-orange-200 p-2">
-      {words.map((word) => (
-        <Link href={"/words/" + word.id} key={word.id} >
-          <WordItem word={word} />
-        </Link>
+    <div className="flex h-[600px] w-full flex-col  overflow-auto ">
+      {words.map((word, index) => (
+        <AlternatingItem key={word.id} index={index}>
+          <Link href={"/words/" + word.id}>
+            <WordItem word={word} />
+          </Link>
+        </AlternatingItem>
       ))}
     </div>
   );
