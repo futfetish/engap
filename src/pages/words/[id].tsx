@@ -1,9 +1,13 @@
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AlternatingItem } from "~/components/alternatingItem";
 import { WordItem } from "~/components/wordItem";
+import { Layout } from "~/features/layout";
 import { db } from "~/server/db";
 import { Word, WordDTO } from "~/types/word";
 import { api } from "~/utils/api";
+import { cn } from "~/utils/cn";
 import { reverseLang } from "~/utils/lang";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -73,15 +77,24 @@ const addConnectFieldToWords = (words: Word[], connectedIds: number[]) => {
 export default function WordP({ word }: { word: WordDTO }) {
   const [otherWords, setOtherWords] = useState<WordWithConnected[]>([]);
 
-  const otherLangWords = api.word.search.useQuery({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const otherLangWords: Word[] = api.word.search.useQuery({
     language: reverseLang(word.language),
   }).data;
 
-  const meaningsIds = api.word.getMeanings.useQuery({ id: word.id }).data
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const meaningsIds: Word[] = api.word.getMeanings.useQuery({
+    id: word.id,
+  }).data;
 
   useEffect(() => {
     if (otherLangWords && meaningsIds) {
-      setOtherWords(addConnectFieldToWords(otherLangWords, meaningsIds.map((meaning) => meaning.id )));
+      setOtherWords(
+        addConnectFieldToWords(
+          otherLangWords,
+          meaningsIds.map((meaning) => meaning.id),
+        ),
+      );
     }
   }, [word, otherLangWords, meaningsIds]);
 
@@ -91,7 +104,7 @@ export default function WordP({ word }: { word: WordDTO }) {
   const { mutate: disconnectF } = api.word.disconnect.useMutation();
 
   const { mutate: addWordMutate } = api.word.create.useMutation({
-    onSuccess: (data) => {
+    onSuccess: (data: Word) => {
       connectF({ toID: word.id, fromIDS: [data.id] });
       setOtherWords((state) => [{ ...data, connected: true }, ...state]);
       setValue("");
@@ -120,49 +133,55 @@ export default function WordP({ word }: { word: WordDTO }) {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div>
-        <div className="text-[35px]">{word.word}</div>
-        <div className="flex gap-2">
-          <div>{word.language}</div>
-          <div>{word.remembered ? "r-d" : ""}</div>
+    <Layout page="Words">
+      <div className="flex flex-col gap-4">
+        <div>
+          <div className="text-[35px]">{word.word}</div>
+          <div className="flex gap-2">
+            <div>{word.language}</div>
+            <div>{word.remembered ? "r-d" : ""}</div>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p>meanings</p>
+        <div className="flex flex-col gap-2">
+          <p>meanings</p>
 
-        {otherWords && (
-          <div className="w-fill flex h-[600px] flex-col gap-2 overflow-auto bg-orange-200 p-2">
-            <div className="w-full bg-orange-400 p-2">
-              <p>create </p>
+          {otherWords && (
+            <div className="w-fill flex h-[600px] flex-col gap-2 overflow-auto ">
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={value}
                   onChange={(e) => setValue(e.currentTarget.value)}
-                  className="w-full bg-orange-300"
+                  placeholder="create"
+                  className="w-full rounded-[4px] bg-primary-3 p-[6px] focus-visible:outline-0"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       addWord();
                     }
                   }}
                 />
-                <button
-                  className="bg-orange-500 px-2 hover:bg-orange-600"
-                  onClick={() => addWord()}
-                >
+                <button className=" px-2" onClick={() => addWord()}>
                   add
                 </button>
               </div>
-            </div>
-            {otherWords.map((word) => (
-              <div key={word.id} onClick={() => toggleWord(word)}>
-                <WordItem word={word} active={word.connected} />
+              <div>
+                {otherWords.map((word, index) => (
+                  <div key={word.id} onClick={() => toggleWord(word)}>
+                    <AlternatingItem key={word.id} index={index}>
+                      <div className="cursor-pointer flex items-center">
+                        <div className="ml-[4px] w-[20px]">
+                          <div className={cn("border-[1px] border-primary-3 h-[20px] rounded-[4px]" , word.connected ? "bg-primary-1" : "")}>  </div>
+                        </div>
+                        <WordItem word={word} />
+                      </div>
+                    </AlternatingItem>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+            </div>
+          )}
+        </div>
+      </div>{" "}
+    </Layout>
   );
 }
