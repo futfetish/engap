@@ -1,16 +1,26 @@
 import { FC } from "react";
 import { WordDTO } from "~/types/word";
 import { cn } from "~/utils/cn";
+import { AlternatingItem } from "./alternatingItem";
+import { BookCheck } from "lucide-react";
 
-export const WordItem: FC<{ word: WordDTO , active? : boolean }> = ({ word , active }) => {
-    return (
-      <div className={cn(" w-full p-2 bg-orange-300 hover:scale-[99%]" , active ? 'bg-orange-400' : '')}>
-        <div> {word.word} </div>
-        <div className="flex gap-2 text-slate-100">
-          <div>{word.language}</div>
-          <div>{word.remembered ? "r-d" : ""}</div>
-        </div>
+export const WordItem: FC<{ word: WordDTO }> = ({
+  word,
+}) => {
+  return (
+    <div className="flex h-[30px] w-full items-center gap-[8px] px-[8px] text-primary-2 hover:text-primary-1">
+      <div className="grow  overflow-ellipsis whitespace-nowrap">
+        {word.word}
       </div>
-    );
-  };
+      <div className=" w-[60px]"> {word.language} </div>
+      <div className=" w-[20px]">
   
+        {word.remembered && (
+          <div className="text-green">
+            <BookCheck  />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
