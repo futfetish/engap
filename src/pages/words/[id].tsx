@@ -1,7 +1,9 @@
+import { BookCheck } from "lucide-react";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AlternatingItem } from "~/components/alternatingItem";
+import { Title } from "~/components/title";
 import { WordItem } from "~/components/wordItem";
 import { Layout } from "~/features/layout";
 import { db } from "~/server/db";
@@ -136,10 +138,16 @@ export default function WordP({ word }: { word: WordDTO }) {
     <Layout page="Words">
       <div className="flex flex-col gap-4">
         <div>
-          <div className="text-[35px]">{word.word}</div>
-          <div className="flex gap-2">
+          <Title>{word.word}</Title>
+          <div className="flex gap-2 items-center">
             <div>{word.language}</div>
-            <div>{word.remembered ? "r-d" : ""}</div>
+            <div>
+              {word.remembered && (
+                <div className="text-green">
+                  <BookCheck size={20} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -168,9 +176,16 @@ export default function WordP({ word }: { word: WordDTO }) {
                 {otherWords.map((word, index) => (
                   <div key={word.id} onClick={() => toggleWord(word)}>
                     <AlternatingItem key={word.id} index={index}>
-                      <div className="cursor-pointer flex items-center">
+                      <div className="flex cursor-pointer items-center">
                         <div className="ml-[4px] w-[20px]">
-                          <div className={cn("border-[1px] border-primary-3 h-[20px] rounded-[4px]" , word.connected ? "bg-primary-1" : "")}>  </div>
+                          <div
+                            className={cn(
+                              "h-[20px] rounded-[4px] border-[1px] border-primary-3",
+                              word.connected ? "bg-primary-1" : "",
+                            )}
+                          >
+                            {" "}
+                          </div>
                         </div>
                         <WordItem word={word} />
                       </div>

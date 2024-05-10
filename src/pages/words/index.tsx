@@ -2,6 +2,7 @@ import { SquarePlus } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
 import { AlternatingItem } from "~/components/alternatingItem";
+import { Title } from "~/components/title";
 import { WordItem } from "~/components/wordItem";
 import { Layout } from "~/features/layout";
 import { Word } from "~/types/word";
@@ -15,15 +16,15 @@ export default function WordsP() {
   return (
     <Layout page="Words">
       <div>
-        <div className="flex items-center gap-2 text-primary-1">
-          <div className="text-3xl">
-             words
+        <Title>
+          <div className="flex items-center gap-2 text-primary-1">
+            words
+            <Link className="" href={"/create"}>
+              <SquarePlus />
+            </Link>
           </div>
-         
-          <Link className="" href={"/create"}>
-            <SquarePlus />
-          </Link>
-        </div>
+        </Title>
+
         <div className="flex gap-6">
           <div className="w-[50%]">
             <div className="text-center text-primary-3">russian</div>
