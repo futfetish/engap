@@ -19,7 +19,7 @@ export default function CreateP() {
     createF({word , language})
   }
   return (
-    <Layout>
+    <Layout page="Words">
      
       <div className="flex flex-col gap-4">
          <Title>create</Title>
