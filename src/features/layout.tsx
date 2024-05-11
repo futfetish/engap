@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FC, ReactNode } from "react";
 import { cn } from "~/utils/cn";
 
-type pageTitleT = "Words" | "Main";
+type pageTitleT = "Words" | "Main" | "Practice";
 
 export const Layout: FC<{ children?: ReactNode; page?: pageTitleT }> = ({
   children,
@@ -27,7 +27,7 @@ interface pageT {
 
 const createPage = (title: pageTitleT, href: string) => ({ title, href });
 
-const pages: pageT[] = [createPage("Main", "/"), createPage("Words", "/words")];
+const pages: pageT[] = [createPage("Main", "/"), createPage("Words", "/words") , createPage("Practice" , "/practice")];
 
 const Nav: FC<{ page?: pageTitleT }> = ({ page }) => {
   return (
