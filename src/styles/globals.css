@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 body {
-    color : white
+  color: white;
+}
+
+.scroll-hide {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

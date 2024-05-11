@@ -1,15 +1,15 @@
 import { BookCheck } from "lucide-react";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { AlternatingItem } from "~/components/alternatingItem";
-import { Title } from "~/components/title";
-import { WordItem } from "~/components/wordItem";
-import { Layout } from "~/features/layout";
+import { AlternatingItem } from "~/components/common/alternatingItem";
+import { Title } from "~/components/common/title";
+import { CheckBox } from "~/components/ui/checkBox";
+import { MyInput } from "~/components/ui/myInput";
+import { WordItem } from "~/components/words/wordItem";
+import { Layout } from "~/features/layout/layout";
 import { db } from "~/server/db";
 import { Word, WordDTO } from "~/types/word";
 import { api } from "~/utils/api";
-import { cn } from "~/utils/cn";
 import { reverseLang } from "~/utils/lang";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -120,17 +120,17 @@ export default function WordP({ word }: { word: WordDTO }) {
     });
   };
 
-  const toggleWord = (word2: WordWithConnected) => {
+  const toggleWord = (currentWord: WordWithConnected) => {
     setOtherWords((state) =>
       state.map((w) =>
-        w.id == word2.id ? { ...w, connected: !w.connected } : w,
+        w.id == currentWord.id ? { ...w, connected: !w.connected } : w,
       ),
     );
 
-    if (word2.connected) {
-      disconnectF({ toID: word.id, fromIDS: [word2.id] });
+    if (currentWord.connected) {
+      disconnectF({ toID: word.id, fromIDS: [currentWord.id] });
     } else {
-      connectF({ toID: word.id, fromIDS: [word2.id] });
+      connectF({ toID: word.id, fromIDS: [currentWord.id] });
     }
   };
 
@@ -139,7 +139,7 @@ export default function WordP({ word }: { word: WordDTO }) {
       <div className="flex flex-col gap-4">
         <div>
           <Title>{word.word}</Title>
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             <div>{word.language}</div>
             <div>
               {word.remembered && (
@@ -156,12 +156,11 @@ export default function WordP({ word }: { word: WordDTO }) {
           {otherWords && (
             <div className="w-fill flex h-[600px] flex-col gap-2 overflow-auto ">
               <div className="flex gap-2">
-                <input
+                <MyInput
                   type="text"
                   value={value}
                   onChange={(e) => setValue(e.currentTarget.value)}
                   placeholder="create"
-                  className="w-full rounded-[4px] bg-primary-3 p-[6px] focus-visible:outline-0"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       addWord();
@@ -178,14 +177,7 @@ export default function WordP({ word }: { word: WordDTO }) {
                     <AlternatingItem key={word.id} index={index}>
                       <div className="flex cursor-pointer items-center">
                         <div className="ml-[4px] w-[20px]">
-                          <div
-                            className={cn(
-                              "h-[20px] rounded-[4px] border-[1px] border-primary-3",
-                              word.connected ? "bg-primary-1" : "",
-                            )}
-                          >
-                            {" "}
-                          </div>
+                         <CheckBox active={word.connected} />
                         </div>
                         <WordItem word={word} />
                       </div>
@@ -196,7 +188,7 @@ export default function WordP({ word }: { word: WordDTO }) {
             </div>
           )}
         </div>
-      </div>{" "}
+      </div>
     </Layout>
   );
 }

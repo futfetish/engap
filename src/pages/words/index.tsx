@@ -1,10 +1,10 @@
 import { SquarePlus } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
-import { AlternatingItem } from "~/components/alternatingItem";
-import { Title } from "~/components/title";
-import { WordItem } from "~/components/wordItem";
-import { Layout } from "~/features/layout";
+import { AlternatingItem } from "~/components/common/alternatingItem";
+import { Title } from "~/components/common/title";
+import { WordItem } from "~/components/words/wordItem";
+import { Layout } from "~/features/layout/layout";
 import { Word } from "~/types/word";
 import { api } from "~/utils/api";
 
@@ -19,7 +19,7 @@ export default function WordsP() {
         <Title>
           <div className="flex items-center gap-2 text-primary-1">
             words
-            <Link className="" href={"/create"}>
+            <Link className="" href={"/words/create"}>
               <SquarePlus />
             </Link>
           </div>

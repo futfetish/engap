@@ -1,7 +1,5 @@
 import { FC } from "react";
 import { WordDTO } from "~/types/word";
-import { cn } from "~/utils/cn";
-import { AlternatingItem } from "./alternatingItem";
 import { BookCheck } from "lucide-react";
 
 export const WordItem: FC<{ word: WordDTO }> = ({

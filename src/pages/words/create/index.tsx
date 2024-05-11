@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Title } from "~/components/title";
-import { Layout } from "~/features/layout";
+import { Title } from "~/components/common/title";
+import { MyInput } from "~/components/ui/myInput";
+import { PickButton } from "~/components/ui/pickButton";
+import { Layout } from "~/features/layout/layout";
 import { Lang, Word } from "~/types/word";
 import { api } from "~/utils/api";
-import { cn } from "~/utils/cn";
 
 export default function CreateP() {
   const router = useRouter();
@@ -20,33 +21,19 @@ export default function CreateP() {
   }
   return (
     <Layout page="Words">
-     
       <div className="flex flex-col gap-4">
          <Title>create</Title>
         <div className="flex gap-2 text-primary-2">
-          <button
-            onClick={() => setLanguage("eng")}
-            className={cn(
-              "px-4 rounded-md",
-              language == "eng" ? "bg-primary-4 text-primary-1" : "",
-            )}
-          >
+          <PickButton className="w-[100px]" value={'eng'} pick={language} setPick={setLanguage}>
             eng
-          </button>
-          <button
-            onClick={() => setLanguage("rus")}
-            className={cn(
-              "px-4 rounded-md",
-              language == "rus" ? "bg-primary-4 text-primary-1" : "",
-            )}
-          >
+          </PickButton>
+          <PickButton className="w-[100px]" value={'rus'} pick={language} setPick={setLanguage}>
             rus
-          </button>
+          </PickButton>
         </div>
         <div className="flex gap-2">
           <div className="flex gap-2">
-            <input
-              type="text"
+            <MyInput
               value={word}
               onChange={(e) => setWord(e.currentTarget.value)}
               placeholder="word"

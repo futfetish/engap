@@ -1,5 +1,5 @@
-import { Title } from "~/components/title";
-import { Layout } from "~/features/layout";
+import { Title } from "~/components/common/title";
+import { Layout } from "~/features/layout/layout";
 
 
 export default function Home() {

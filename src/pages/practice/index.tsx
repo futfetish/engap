@@ -1,53 +1,50 @@
-import { Dices, Shuffle } from "lucide-react";
+import { Dices, LucideIcon, Shuffle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { Card } from "~/components/card";
-import { Title } from "~/components/title";
-import { Layout } from "~/features/layout";
+import { Title } from "~/components/common/title";
+import { Layout } from "~/features/layout/layout";
 import { cn } from "~/utils/cn";
+import { PickButton, PickButtonI } from "~/components/ui/pickButton";
 
 export default function PracticeP() {
-  const [language, setLanguage] = useState<"russian" | "english" | "both">(
-    "both",
-  );
+  type Lang = "russian" | "english" | "both";
+  const [language, setLanguage] = useState<Lang>("both");
 
-  const [mode, setMode] = useState<"shuffle" | "random">("shuffle");
+  type Mode = "shuffle" | "random";
+  const [mode, setMode] = useState<Mode>("shuffle");
 
   return (
     <Layout page="Practice">
       <div className="flex flex-col gap-4">
         <Title>practice</Title>
+
         <div className="flex flex-col gap-2">
           <p>language</p>
 
           <div className="grid grid-cols-3 gap-4 ">
-            <Card
-              onClick={() => setLanguage("russian")}
-              className={cn(
-                "cursor-pointer text-center text-primary-2",
-                language == "russian" ? "!bg-primary-3 !text-primary-1" : "",
-              )}
+            <PickButton<Lang>
+              pick={language}
+              setPick={setLanguage}
+              value="russian"
             >
               russian
-            </Card>
-            <Card
-              onClick={() => setLanguage("english")}
-              className={cn(
-                "cursor-pointer text-center text-primary-2" ,
-                language == "english" ? "!bg-primary-3 !text-primary-1" : "",
-              )}
+            </PickButton>
+
+            <PickButton<Lang>
+              pick={language}
+              setPick={setLanguage}
+              value="english"
             >
               english
-            </Card>
-            <Card
-              onClick={() => setLanguage("both")}
-              className={cn(
-                "cursor-pointer text-center text-primary-2",
-                language == "both" ? "!bg-primary-3 !text-primary-1" : "",
-              )}
+            </PickButton>
+
+            <PickButton<Lang>
+              pick={language}
+              setPick={setLanguage}
+              value="both"
             >
               both
-            </Card>
+            </PickButton>
           </div>
         </div>
 
@@ -55,43 +52,57 @@ export default function PracticeP() {
           <p>mode</p>
 
           <div className="grid grid-cols-3 gap-4 ">
-            <Card
-              onClick={() => setMode("shuffle")}
-              className={cn(
-                "flex cursor-pointer justify-center p-6 text-primary-2",
-                mode == "shuffle" ? "!bg-primary-3 !text-primary-1" : "",
-              )}
+            <PickModeButton<Mode>
+              pick={mode}
+              setPick={setMode}
+              value={"shuffle"}
+              Icon={Shuffle}
             >
-              <div className=" flex items-center gap-2">
-                <div>
-                  <Shuffle size={32} />
-                </div>
-                <div className="text-[24px]"> Shuffle </div>
-              </div>
-            </Card>
-            <Card
-              onClick={() => setMode("random")}
-              className={cn(
-                "flex cursor-pointer justify-center p-6 text-primary-2",
-                mode == "random" ? "!bg-primary-3 !text-primary-1" : "",
-              )}
+              Shuffle
+            </PickModeButton>
+
+            <PickModeButton<Mode>
+              pick={mode}
+              setPick={setMode}
+              value={"random"}
+              Icon={Dices}
             >
-              <div className=" flex items-center gap-2">
-                <div>
-                  <Dices size={32} />
-                </div>
-                <div className="text-[24px]"> Random </div>
-              </div>
-            </Card>
+              Random
+            </PickModeButton>
           </div>
         </div>
-        <div className="flex justify-center mt-8 ">
-             <Link href={`/practice/process?language=${language}&mode=$`} className="text-center py-4 px-12 text-[30px] text-primary-2 hover:text-primary-1">
-          start
-        </Link>
+
+        <div className="mt-8 flex justify-center ">
+          <Link
+            href={`/practice/process?language=${language}&mode=${mode}`}
+            className="px-12 py-4 text-center text-[30px] text-primary-2 hover:text-primary-1"
+          >
+            start
+          </Link>
         </div>
-       
       </div>
     </Layout>
   );
 }
+
+interface PickModeButtonI<T> extends PickButtonI<T> {
+  Icon: LucideIcon;
+}
+
+const PickModeButton = <T,>({
+  children,
+  className,
+  Icon,
+  ...props
+}: PickModeButtonI<T>) => {
+  return (
+    <PickButton {...props} className={cn("p-6", className ?? "")}>
+      <div className=" flex items-center gap-2">
+        <div>
+          <Icon size={32} />
+        </div>
+        <div className="text-[24px]"> {children} </div>
+      </div>
+    </PickButton>
+  );
+};
