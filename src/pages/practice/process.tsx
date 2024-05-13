@@ -18,8 +18,8 @@ export default function PracticeProcessP() {
           <Title>practice</Title>
           <PracticeSettings />
         </div>
-        <div className="flex justify-center w-full p-4">
-          <WordSwitchCard rusWords={['rus1'  , 'rus2']} engWords={['eng1'  , 'eng2']} defaultSide="english" />
+        <div className="flex justify-center w-full h-[600px] py-4 px-32">
+          <WordSwitchCard rusWords={['rus1'  , 'rus2']} engWords={['eng1'  , 'eng2' , 'eng3' , 'eng2'  , 'eng2'  , 'eng2'  , 'eng2'  , 'eng2' ]} defaultSide="english" />
         </div>
       </div>
     </Layout>
