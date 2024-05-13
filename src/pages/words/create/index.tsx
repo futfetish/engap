@@ -10,7 +10,7 @@ import { api } from "~/utils/api";
 export default function CreateP() {
   const router = useRouter();
   const [word, setWord] = useState("");
-  const [language, setLanguage] = useState<Lang>("eng");
+  const [language, setLanguage] = useState<Lang>("english");
   const { mutate: createF } = api.word.create.useMutation({
     onSuccess: (data: Word) => {
       router.push("/words/" + data.id);
@@ -24,10 +24,10 @@ export default function CreateP() {
       <div className="flex flex-col gap-4">
          <Title>create</Title>
         <div className="flex gap-2 text-primary-2">
-          <PickButton className="w-[100px]" value={'eng'} pick={language} setPick={setLanguage}>
+          <PickButton className="w-[100px]" value={'english'} pick={language} setPick={setLanguage}>
             eng
           </PickButton>
-          <PickButton className="w-[100px]" value={'rus'} pick={language} setPick={setLanguage}>
+          <PickButton className="w-[100px]" value={'russian'} pick={language} setPick={setLanguage}>
             rus
           </PickButton>
         </div>

@@ -8,19 +8,19 @@ export const wordRouter = createTRPCRouter({
     .input(z.object({ word: z.string(), language: Zlang }))
     .mutation(async ({ input, ctx }) => {
       const word = await ctx.db.word.findUnique({
-        where : {
-          word : input.word
-        }
-      })
-      if(word){
-        return word
+        where: {
+          word: input.word,
+        },
+      });
+      if (word) {
+        return word;
       }
       const newWord = await ctx.db.word.create({
         data: {
           ...input,
         },
       });
-      console.log('ceatwe')
+      console.log("ceatwe");
       return newWord;
     }),
 
@@ -32,7 +32,7 @@ export const wordRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      console.log('conneac')
+      console.log("conneac");
       await ctx.db.word.update({
         where: {
           id: input.toID,
@@ -46,7 +46,7 @@ export const wordRouter = createTRPCRouter({
           },
         },
       });
-      
+
       return {};
     }),
   disconnect: publicProcedure
@@ -91,11 +91,11 @@ export const wordRouter = createTRPCRouter({
           remembered,
         },
         orderBy: {
-          word: 'asc', 
+          word: "asc",
         },
       });
-      if(!res){
-        return []
+      if (!res) {
+        return [];
       }
       return res;
     }),
@@ -113,23 +113,53 @@ export const wordRouter = createTRPCRouter({
       });
       return {};
     }),
-  getMeanings : publicProcedure.input(z.object({id : z.number()})).query(async ({ input , ctx }) => {
-    const {id} = input
-    const word = await ctx.db.word.findUnique({
-      where : {
-        id
-      },
-      select : {
-        meanings : {
-          orderBy : {
-            word : 'asc'
-          }
-        }
-      },
-    })
-    if(!word){
-      return []
-    }
-    return word.meanings
-  })
+  getMeanings: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input, ctx }) => {
+      const { id } = input;
+      const word = await ctx.db.word.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          meanings: {
+            orderBy: {
+              word: "asc",
+            },
+          },
+        },
+      });
+      if (!word) {
+        return [];
+      }
+      return word.meanings;
+    }),
+  getCount: publicProcedure
+    .input(z.object({ language: Zlang.optional() }))
+    .query(async ({ ctx, input }) => {
+      const { language } = input;
+      const count = await ctx.db.word.count({
+        where: {
+          language,
+        },
+      });
+      return count;
+    }),
+  getByIndex: publicProcedure
+    .input(
+      z.object({
+        index: z.number(),
+        language: Zlang.optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { index, language } = input;
+      const word = await ctx.db.word.findFirst({
+        where: {
+          language,
+        },
+        skip: index - 1,
+      });
+      return word
+    }),
 });

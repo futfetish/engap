@@ -5,10 +5,10 @@ import { Title } from "~/components/common/title";
 import { Layout } from "~/features/layout/layout";
 import { cn } from "~/utils/cn";
 import { PickButton, PickButtonI } from "~/components/ui/pickButton";
+import { PracticeLang } from "~/types/word";
 
 export default function PracticeP() {
-  type Lang = "russian" | "english" | "both";
-  const [language, setLanguage] = useState<Lang>("both");
+  const [language, setLanguage] = useState<PracticeLang>("both");
 
   type Mode = "shuffle" | "random";
   const [mode, setMode] = useState<Mode>("shuffle");
@@ -22,7 +22,7 @@ export default function PracticeP() {
           <p>language</p>
 
           <div className="grid grid-cols-3 gap-4 ">
-            <PickButton<Lang>
+            <PickButton<PracticeLang>
               pick={language}
               setPick={setLanguage}
               value="russian"
@@ -30,7 +30,7 @@ export default function PracticeP() {
               russian
             </PickButton>
 
-            <PickButton<Lang>
+            <PickButton<PracticeLang>
               pick={language}
               setPick={setLanguage}
               value="english"
@@ -38,7 +38,7 @@ export default function PracticeP() {
               english
             </PickButton>
 
-            <PickButton<Lang>
+            <PickButton<PracticeLang>
               pick={language}
               setPick={setLanguage}
               value="both"
