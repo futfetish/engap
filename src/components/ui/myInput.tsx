@@ -6,6 +6,6 @@ export const MyInput: FC<InputHTMLAttributes<HTMLInputElement>> = ({
   ...props
 }) => {
   return (
-    <input {...props} className={cn("w-full rounded-[4px] bg-primary-3 p-[6px] focus-visible:outline-0" , className ?? '' )}/>
+    <input {...props} className={cn("text-primary-1 w-full rounded-[4px] bg-primary-3 p-[6px] focus-visible:outline-0" , className ?? '' )}/>
   );
 };
