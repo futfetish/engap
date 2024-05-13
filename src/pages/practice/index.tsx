@@ -5,13 +5,15 @@ import { Title } from "~/components/common/title";
 import { Layout } from "~/features/layout/layout";
 import { cn } from "~/utils/cn";
 import { PickButton, PickButtonI } from "~/components/ui/pickButton";
-import { PracticeLang } from "~/types/word";
+import { Mode, PracticeLang } from "~/types/practice";
 
 export default function PracticeP() {
   const [language, setLanguage] = useState<PracticeLang>("both");
 
-  type Mode = "shuffle" | "random";
+
   const [mode, setMode] = useState<Mode>("shuffle");
+
+
 
   return (
     <Layout page="Practice">

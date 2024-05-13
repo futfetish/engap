@@ -6,7 +6,7 @@ export const Zlang = z.enum(['english' , 'russian'])
 
 export type Lang = z.infer<typeof Zlang>
 
-export type PracticeLang = Lang | 'both'
+
 
 export interface Word  {
     id: number;
