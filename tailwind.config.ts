@@ -21,12 +21,12 @@ export default {
           2: "#ffa116",
         },
         eng: {
-          1: "#dabcff",
-          2: "#cca3ff",
+          1: "#cca3ff",
+          2: "#8a78a1",
         },
         rus: {
-          1: "#ffd9df",
-          2: "#FFC0CB",
+          1: "#FFC0CB",
+          2: "#8c7478",
         },
         green: "#2cbb5e",
       },
