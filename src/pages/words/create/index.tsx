@@ -17,17 +17,29 @@ export default function CreateP() {
     },
   });
   const createWord = () => {
-    createF({word , language})
-  }
+    createF({ word, language });
+  };
   return (
     <Layout page="Words">
       <div className="flex flex-col gap-4">
-         <Title>create</Title>
+        <Title>
+          <div className="text-primary-1">create</div>
+        </Title>
         <div className="flex gap-2 text-primary-2">
-          <PickButton className="w-[100px]" value={'english'} pick={language} setPick={setLanguage}>
+          <PickButton
+            className="w-[100px]"
+            value={"english"}
+            pick={language}
+            setPick={setLanguage}
+          >
             eng
           </PickButton>
-          <PickButton className="w-[100px]" value={'russian'} pick={language} setPick={setLanguage}>
+          <PickButton
+            className="w-[100px]"
+            value={"russian"}
+            pick={language}
+            setPick={setLanguage}
+          >
             rus
           </PickButton>
         </div>
@@ -45,9 +57,7 @@ export default function CreateP() {
               }}
             />
           </div>
-          <button onClick={() =>createWord()}>
-            create
-          </button>
+          <button className="text-primary-1" onClick={() => createWord()}>create</button>
         </div>
       </div>
     </Layout>

@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  color: white;
-}
-
 .scroll-hide {
   scrollbar-width: none;
 

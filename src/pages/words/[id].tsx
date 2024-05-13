@@ -137,7 +137,7 @@ export default function WordP({ word }: { word: WordDTO }) {
   return (
     <Layout page="Words">
       <div className="flex flex-col gap-4">
-        <div>
+        <div className="text-primary-1">
           <Title>{word.word}</Title>
           <div className="flex items-center gap-2">
             <div>{word.language}</div>
@@ -151,7 +151,7 @@ export default function WordP({ word }: { word: WordDTO }) {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <p>meanings</p>
+          <p className="text-primary-1" >meanings</p>
 
           {otherWords && (
             <div className="w-fill flex h-[600px] flex-col gap-2 overflow-auto ">
@@ -167,7 +167,7 @@ export default function WordP({ word }: { word: WordDTO }) {
                     }
                   }}
                 />
-                <button className=" px-2" onClick={() => addWord()}>
+                <button className="text-primary-1 px-2" onClick={() => addWord()}>
                   add
                 </button>
               </div>

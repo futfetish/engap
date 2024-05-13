@@ -18,10 +18,10 @@ export default function PracticeP() {
   return (
     <Layout page="Practice">
       <div className="flex flex-col gap-4">
-        <Title>practice</Title>
+        <Title> <div className="text-primary-1"> practice </div></Title>
 
         <div className="flex flex-col gap-2">
-          <p>language</p>
+          <p className="text-primary-1" >language</p>
 
           <div className="grid grid-cols-3 gap-4 ">
             <PickButton<PracticeLang>
@@ -51,7 +51,7 @@ export default function PracticeP() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <p>mode</p>
+          <p className="text-primary-1">mode</p>
 
           <div className="grid grid-cols-3 gap-4 ">
             <PickModeButton<Mode>

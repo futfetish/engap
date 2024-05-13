@@ -2,6 +2,7 @@ import { Dices, Shuffle } from "lucide-react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import { Title } from "~/components/common/title";
+import { WordSwitchCard } from "~/components/practice/wordSwitchCard";
 import { PickButton } from "~/components/ui/pickButton";
 import { Layout } from "~/features/layout/layout";
 import { Mode, ZMode, ZPracticeLang } from "~/types/practice";
@@ -12,10 +13,13 @@ export default function PracticeProcessP() {
   //   console.log(router.query);
   return (
     <Layout page="Practice">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2 text-primary-1">
           <Title>practice</Title>
           <PracticeSettings />
+        </div>
+        <div className="flex justify-center w-full p-4">
+          <WordSwitchCard rusWords={['rus1'  , 'rus2']} engWords={['eng1'  , 'eng2']} defaultSide="english" />
         </div>
       </div>
     </Layout>
