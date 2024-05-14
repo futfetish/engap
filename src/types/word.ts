@@ -16,6 +16,11 @@ export interface Word  {
     remembered: boolean;
 }
 
+export interface WordWithMeanings  extends Word {
+    meanings : Word[]
+}
+
+
 export interface WordDTO {
     id: number;
     word: string;

@@ -135,31 +135,42 @@ export const wordRouter = createTRPCRouter({
       return word.meanings;
     }),
   getCount: publicProcedure
-    .input(z.object({ language: Zlang.optional() }))
+    .input(
+      z.object({
+        language: Zlang.optional(),
+        remembered: z.boolean().optional(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
-      const { language } = input;
+      const { language, remembered } = input;
       const count = await ctx.db.word.count({
         where: {
           language,
+          remembered,
         },
       });
       return count;
     }),
-  getByIndex: publicProcedure
+  getByIndexForPractice: publicProcedure
     .input(
       z.object({
         index: z.number(),
         language: Zlang.optional(),
+        remembered: z.boolean().optional(),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      const { index, language } = input;
+    .mutation(async ({ ctx, input }) => {
+      const { index, language, remembered } = input;
       const word = await ctx.db.word.findFirst({
         where: {
           language,
+          remembered,
         },
         skip: index - 1,
+        include : {
+          meanings : true
+        }
       });
-      return word
+      return word;
     }),
 });
