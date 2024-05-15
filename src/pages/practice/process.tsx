@@ -8,7 +8,7 @@ import { PickButton } from "~/components/ui/pickButton";
 import { Layout } from "~/features/layout/layout";
 import { Mode, ZMode, ZPracticeLang } from "~/types/practice";
 import { PracticeLang } from "~/types/practice";
-import { Lang, WordWithMeanings } from "~/types/word";
+import { Lang } from "~/types/word";
 import { api } from "~/utils/api";
 import { cn } from "~/utils/cn";
 import { PracticeModeIndexGenerator, practiceModeMap } from "~/utils/practice";
@@ -54,14 +54,14 @@ export default function PracticeProcessP({
   LANGUAGE: PracticeLang;
   MODE: Mode;
 }) {
-  const [ isAnimate , setIsAnimate ] = useState(false)
+  const [isAnimate, setIsAnimate] = useState(false);
 
   const startAnimation = () => {
-    setIsAnimate(true)
+    setIsAnimate(true);
     setTimeout(() => {
       setIsAnimate(false);
     }, 100);
-  }
+  };
 
   const [rusWords, setRusWords] = useState<string[]>([]);
   const [engWords, setEngWords] = useState<string[]>([]);
@@ -69,17 +69,20 @@ export default function PracticeProcessP({
   const [indexer, setIndexer] = useState<
     PracticeModeIndexGenerator | undefined
   >(undefined);
-  const totalCount = api.word.getCount.useQuery({
-    language: LANGUAGE !== "both" ? LANGUAGE : undefined,
-    remembered: false,
-  }).data as number;
+  const { data: totalCount, isLoading: totalCountLoading } =
+    api.word.getCount.useQuery({
+      language: LANGUAGE !== "both" ? LANGUAGE : undefined,
+      remembered: false,
+    });
 
   useEffect(() => {
-    setIndexer(new practiceModeMap[MODE](totalCount));
-  }, [MODE, totalCount]);
+    if (totalCount && MODE) {
+      setIndexer(new practiceModeMap[MODE](totalCount));
+    }
+  }, [MODE, totalCount, totalCountLoading]);
 
   const { mutate: getByIndex } = api.word.getByIndexForPractice.useMutation({
-    onSuccess: (data: WordWithMeanings) => {
+    onSuccess: (data) => {
       const word = data;
       if (word) {
         if (word.language == "russian") {
@@ -97,7 +100,7 @@ export default function PracticeProcessP({
 
   const nextF = () => {
     if (indexer) {
-      startAnimation()
+      startAnimation();
       const index = indexer.getNext();
       getByIndex({
         index,
@@ -107,7 +110,12 @@ export default function PracticeProcessP({
     }
   };
 
-  // nextF();
+  useEffect(() => {
+    if (defaultSide == undefined) {
+      nextF();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [indexer]);
 
   return (
     <Layout page="Practice">
@@ -119,7 +127,12 @@ export default function PracticeProcessP({
 
         <div className="flex h-[700px] w-full flex-col items-center px-32 py-4">
           {defaultSide && indexer && (
-            <div className={cn("h-full w-full transition duration-[100ms] ease-in" , isAnimate ? 'scale-[101%]' : '')}>
+            <div
+              className={cn(
+                "h-full w-full transition duration-[100ms] ease-in",
+                isAnimate ? "scale-[101%]" : "",
+              )}
+            >
               <WordSwitchCard
                 rusWords={rusWords}
                 engWords={engWords}
