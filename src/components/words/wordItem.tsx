@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { WordDTO } from "~/types/word";
 import { BookCheck } from "lucide-react";
+import { cn } from "~/utils/cn";
 
 export const WordItem: FC<{ word: WordDTO }> = ({
   word,
@@ -10,7 +11,7 @@ export const WordItem: FC<{ word: WordDTO }> = ({
       <div className="grow  overflow-ellipsis whitespace-nowrap">
         {word.word}
       </div>
-      <div className=" w-[60px]"> {word.language} </div>
+      <div className={cn(" w-[60px]" , word.language === 'english' ?  'text-eng-1' : 'text-rus-1')}> {word.language} </div>
       <div className=" w-[20px]">
   
         {word.remembered && (

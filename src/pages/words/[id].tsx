@@ -80,12 +80,12 @@ export default function WordP({ word }: { word: WordDTO }) {
   const [otherWords, setOtherWords] = useState<WordWithConnected[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const otherLangWords: Word[] = api.word.search.useQuery({
+  const otherLangWords = api.word.search.useQuery({
     language: reverseLang(word.language),
   }).data;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const meaningsIds: Word[] = api.word.getMeanings.useQuery({
+  const meaningsIds = api.word.getMeanings.useQuery({
     id: word.id,
   }).data;
 

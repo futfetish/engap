@@ -10,9 +10,9 @@ import { api } from "~/utils/api";
 
 export default function WordsP() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const engWords: Word[] = api.word.search.useQuery({ language: "english" }).data;
+  const engWords = api.word.search.useQuery({ language: "english" }).data;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const rusWords: Word[] = api.word.search.useQuery({ language: "russian" }).data;
+  const rusWords = api.word.search.useQuery({ language: "russian" }).data;
   return (
     <Layout page="Words">
       <div>
