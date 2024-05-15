@@ -10,6 +10,7 @@ import { Layout } from "~/features/layout/layout";
 import { db } from "~/server/db";
 import { Word, WordDTO } from "~/types/word";
 import { api } from "~/utils/api";
+import { cn } from "~/utils/cn";
 import { reverseLang } from "~/utils/lang";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -78,13 +79,18 @@ const addConnectFieldToWords = (words: Word[], connectedIds: number[]) => {
 
 export default function WordP({ word }: { word: WordDTO }) {
   const [otherWords, setOtherWords] = useState<WordWithConnected[]>([]);
+  const [isRemembered , setIsRemembered] = useState(word.remembered)
+  
+  const {mutate : toggleRemebered} = api.word.toggleRemembered.useMutation({
+    onSuccess : (data) => {
+      setIsRemembered(data)
+    }
+  })
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const otherLangWords = api.word.search.useQuery({
     language: reverseLang(word.language),
   }).data;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const meaningsIds = api.word.getMeanings.useQuery({
     id: word.id,
   }).data;
@@ -141,17 +147,19 @@ export default function WordP({ word }: { word: WordDTO }) {
           <Title>{word.word}</Title>
           <div className="flex items-center gap-2">
             <div>{word.language}</div>
-            <div>
-              {word.remembered && (
-                <div className="text-green">
-                  <BookCheck size={20} />
-                </div>
-              )}
+            <div onClick={() => toggleRemebered({id : word.id})} className="cursor-pointer">
+              <div
+                className={cn(
+                 isRemembered ? "text-green" : "text-primary-2",
+                )}
+              >
+                <BookCheck size={20} />
+              </div>
             </div>
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <p className="text-primary-1" >meanings</p>
+          <p className="text-primary-1">meanings</p>
 
           {otherWords && (
             <div className="w-fill flex h-[600px] flex-col gap-2 overflow-auto ">
@@ -167,7 +175,10 @@ export default function WordP({ word }: { word: WordDTO }) {
                     }
                   }}
                 />
-                <button className="text-primary-1 px-2" onClick={() => addWord()}>
+                <button
+                  className="px-2 text-primary-1"
+                  onClick={() => addWord()}
+                >
                   add
                 </button>
               </div>
@@ -177,7 +188,7 @@ export default function WordP({ word }: { word: WordDTO }) {
                     <AlternatingItem key={word.id} index={index}>
                       <div className="flex cursor-pointer items-center">
                         <div className="ml-[4px] w-[20px]">
-                         <CheckBox active={word.connected} />
+                          <CheckBox active={word.connected} />
                         </div>
                         <WordItem word={word} />
                       </div>

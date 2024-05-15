@@ -167,10 +167,34 @@ export const wordRouter = createTRPCRouter({
           remembered,
         },
         skip: index - 1,
-        include : {
-          meanings : true
-        }
+        include: {
+          meanings: true,
+        },
       });
       return word;
+    }),
+  toggleRemembered: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      const word = await ctx.db.word.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if(!word){
+        throw Error("toggle remebered: 404")
+      }
+
+      const res = await ctx.db.word.update({
+        where: {
+          id,
+        },
+        data: {
+          remembered: !word.remembered,
+        },
+      });
+      return res.remembered;
     }),
 });
